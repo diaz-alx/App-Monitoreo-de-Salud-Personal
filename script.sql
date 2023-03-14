@@ -82,7 +82,7 @@ create table pruebas_imc(
     img_estado varchar(100) not null default 'img/default.png',
     nota text not null,
     advertencia text not null,
-    fecha date not null,
+    fecha TIMESTAMP not null,
     id_user int(10) not null
 );
 
@@ -94,7 +94,7 @@ create table pruebas_glucosa(
     nivel varchar(100) not null,
     nota text not null,
     advertencia text not null,
-    fecha date not null,
+    fecha TIMESTAMP not null,
     id_user int(10) not null
 );
 
@@ -105,7 +105,7 @@ create table pruebas_presion(
     lec2 float(10,2) not null DEFAULT 0,
     nota text not null,
     advertencia text not null,
-    fecha date not null,
+    fecha TIMESTAMP not null,
     id_user int(10) not null
 );
 
@@ -125,29 +125,9 @@ create table usuarios (
     peso float(10,2) not null,
     altura float(10,2) not null
 );
---
--- insercciones para usuarios
---
-INSERT INTO USUARIOS VALUES(1, 'admin', '123', 'gabriel diaz', 'img/male.png', 'm', '1990-12-15', '31','75','1.7');
-INSERT INTO USUARIOS VALUES(2, 'usuario', 'pass123', 'user', 'img/female.png', 'f', '2000-14-01', '20','60','1.6');
 
 
-CREATE TABLE categorias (
-  id int(5) NOT NULL,
-  name varchar(100) NOT NULL,
-  color varchar(7) NOT NULL
-);
 
-INSERT INTO categorias (id, name, color) VALUES
-(1, 'imc', '#DE1F59'),
-(2, 'glucosa', '#DE1FAA'),
-(3, 'presion', '#B01FDE');
-
---
--- Indexes for table `categories`
---
-ALTER TABLE categorias
-  ADD PRIMARY KEY (id);
 
 --
 -- Indexes for table pruebas
@@ -171,15 +151,6 @@ ALTER TABLE usuarios
   ADD PRIMARY KEY (id_user),
   ADD UNIQUE KEY username (user);
 
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table categorias
---
-ALTER TABLE categorias
-  MODIFY id int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table pruebas
@@ -197,7 +168,7 @@ ALTER TABLE pruebas_presion
 -- AUTO_INCREMENT for table usuarios
 --
 ALTER TABLE usuarios
-  MODIFY id_user int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY id_user int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- Constraints for dumped tables
@@ -214,5 +185,147 @@ ALTER TABLE pruebas_glucosa
 
 ALTER TABLE pruebas_presion
   ADD CONSTRAINT id_user_pruebaspresion FOREIGN KEY (id_user) REFERENCES usuarios (id_user);
+
+
+--
+-- Procedures guardar resltados en imc
+--
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GuardarIMC`(
+  IN `p_lec1` FLOAT, 
+  IN `p_estado` VARCHAR(50), 
+  IN `p_img_estado` VARCHAR(50), 
+  IN `p_nota` TEXT, 
+  IN `p_advertencia` TEXT, 
+  IN `p_idUser` INT, 
+  IN `p_peso` INT)
+BEGIN
+	INSERT INTO pruebas_imc(lec1, estado, img_estado, nota, advertencia, id_user) 
+	VALUES (p_lec1, p_estado, p_img_estado, p_nota, p_advertencia, p_idUser);
+
+  UPDATE usuarios SET peso = p_peso WHERE id_user = p_idUser;
+END$$
+DELIMITER ;
+
+--
+-- Procedures guardar resltados en glucosa
+--
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GuardarGlucosa`(
+	IN `p_tipo` VARCHAR(100), 
+	IN `p_lec1` FLOAT(10,2),
+	IN `p_estado` VARCHAR(100),
+	IN `p_nivel` VARCHAR(100), 
+	IN `p_nota` TEXT, 
+	IN `p_advertencia` TEXT, 
+	IN `p_idUser` INT)
+BEGIN
+	INSERT INTO pruebas_glucosa(tipo, lec1, estado, nivel, nota, advertencia, id_user) 
+	VALUES (p_tipo, p_lec1, p_estado, p_nivel, p_nota, p_advertencia, p_idUser);
+END$$
+DELIMITER ;
+
+--
+-- Procedures guardar resltados en glucosa
+--
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GuardarPresion`( 
+  IN `p_estado` VARCHAR(100),
+	IN `p_lec1` FLOAT(10,2),
+  IN `p_lec2` FLOAT(10,2),
+	IN `p_nota` TEXT, 
+	IN `p_advertencia` TEXT, 
+	IN `p_idUser` INT)
+BEGIN
+	INSERT INTO pruebas_presion(estado, lec1, lec2, nota, advertencia, id_user) 
+	VALUES (p_estado, p_lec1, p_lec2, p_nota, p_advertencia, p_idUser);
+END$$
+DELIMITER ;
+
+
+--
+-- Procedures buscar resultados de las pruebas
+--
+
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `BuscarResultados`(IN `p_idUser` INT)
+BEGIN
+    SELECT g.advertencia as 'g_advertencia', g.estado as 'g_estado', g.lec1 as 'g_lec1', g.nota as 'g_nota', g.tipo as 'g_tipo', g.nivel as 'g_nivel', 
+      i.advertencia as 'i_advertencia', i.estado as 'i_estado',i.img_estado as 'i_img_estado', i.lec1 as 'i_lec1', i.nota as 'i_nota', 
+      p.advertencia as 'p_advertencia', p.estado as 'p_estado', p.lec1 as 'p_lec1', p.lec2 as 'p_lec2', p.nota as 'p_nota' 
+      FROM pruebas_glucosa g, pruebas_imc i, pruebas_presion p 
+      WHERE g.id_user= p_idUser AND i.id_user = p_idUser and p.id_user = p_idUser 
+      ORDER BY g.fecha, i.fecha , p.fecha DESC LIMIT 1;
+END$$
+DELIMITER ;
+
+--
+-- Procedures InsertarNuevo Usuario
+--
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsertarNuevoUsuario`(IN `p_user` VARCHAR(50), 
+IN `p_pass` VARCHAR(200), 
+IN `p_nombre` VARCHAR(50), 
+IN `p_genero` VARCHAR(20), 
+IN `p_fecha_nac` varchar(20), 
+IN `p_peso` FLOAT(10,2), 
+IN `p_altura` FLOAT(10,2))
+BEGIN
+    DECLARE edad int;
+    DECLARE adj char;
+    DECLARE picture varchar(50);
+    
+	SELECT DATE_FORMAT(FROM_DAYS(DATEDIFF(now(),p_fecha_nac)), '%Y')+0 INTO edad;
+   
+
+    IF p_genero = 'femenino' THEN
+    SET adj = 'a';
+    SET picture = 'img/profilefemale.png';
+    ELSE 
+    SET adj = 'o';
+    SET picture = 'img/profilemale.png';
+    END IF;
+
+    INSERT INTO usuarios (user,pass,nombre,pic_profile,genero,adj,fecha_nac,edad,peso,altura)
+    VALUES(
+      p_user,p_pass,p_nombre,picture,p_genero,adj,p_fecha_nac,edad,p_peso,p_altura
+    );
+
+END$$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE TRIGGER `updatePruebas` AFTER INSERT ON `usuarios`
+ FOR EACH ROW BEGIN
+           INSERT INTO pruebas_imc  (lec1,estado,img_estado,nota,advertencia,id_user)
+           VALUES
+           (calcularIMC(NEW.peso, new.altura), 'sin datos', 'img/bmi.png', 'sin datos', 'sin datos', NEW.id_user);
+
+			INSERT INTO pruebas_glucosa (tipo,lec1,estado,nivel,nota,advertencia,id_user)
+            VALUES
+            ('sin datos',0,'sin datos','sin datos','sin datos', 'sin datos', NEW.id_user);
+
+			INSERT INTO pruebas_presion (estado,lec1,lec2,nota,advertencia,id_user)
+            VALUES
+            ('sin datos',0,0,'sin datos','sin datos', NEW.id_user);
+
+END$$
+DELIMITER ;
+
+CREATE FUNCTION `calcularIMC` (weight FLOAT, height FLOAT)
+RETURNS FLOAT
+BEGIN
+  DECLARE imc FLOAT;
+  SET imc = weight / (height * height);
+  RETURN imc;
+END;
+
+
+
 
 

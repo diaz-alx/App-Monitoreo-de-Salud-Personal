@@ -19,9 +19,9 @@
           <div class="col-md-6">
             <div class="card-body">
               <h2 class="card-tittle" ><b>Historial de: </b><b style="color:red;"> <?php echo ucwords($_SESSION['UserValues']['nombre']); ?></b></h2>
-              <p class="card-text">Ultima lectura: Sistólica <?php echo $_SESSION['UserValues']['presion']['sistolica']; ?> mmHg / Diastólica <?php echo $_SESSION['UserValues']['presion']['diastolica']; ?> mmHg</p>
-              <p class="card-text">Presión arterial: <?php echo $_SESSION['UserValues']['presion']['estado']; ?></p>
-              <p class="card-text">Aviso: <?php echo $_SESSION['UserValues']['presion']['alerta']; ?></p>
+              <p class="card-text">Ultima lectura: Sistólica <?php echo $_SESSION['resultado']['p_lec1']; ?> mmHg / Diastólica <?php echo $_SESSION['resultado']['p_lec2']; ?> mmHg</p>
+              <p class="card-text">Presión arterial: <?php echo $_SESSION['resultado']['p_estado']; ?></p>
+              <p class="card-text">Aviso: <?php echo $_SESSION['resultado']['p_nota']; ?></p>
             </div>
           </div>
           <div class="col-md-6">
@@ -83,10 +83,10 @@
               <div class="col-md-8">
                 <div class="card-body">
                   <h5 class="card-title"><b>Resultados</b> </h5>
-                  <p class="card-text">Ingresaste un lectura1 sistólica: <input type="number" name="set_lectura1" value="<?php echo $resultPresion['lectura1']; ?>" readonly>mmHg </p> 
-                  <p class="card-text">Ingresaste un lectura2 diastólica: <input type="number" name="set_lectura2" value="<?php echo $resultPresion['lectura2']; ?>" readonly>mmHg </p>
-                  <p class="card-text">Sus presión arterial es <?php echo $resultPresion['estado']; ?>.</p>
-                  <p class="card-text">Alerta: <?php echo $resultPresion['alerta']; ?>!. <?php echo $resultPresion['mensaje']; ?></p>
+                  <p class="card-text">Ingresaste un lectura1 sistólica: <input type="number" name="set_lectura1" value="<?php echo $resultPresion['p_lec1']; ?>" readonly>mmHg </p> 
+                  <p class="card-text">Ingresaste un lectura2 diastólica: <input type="number" name="set_lectura2" value="<?php echo $resultPresion['p_lec2']; ?>" readonly>mmHg </p>
+                  <p class="card-text">Sus presión arterial es <?php echo $resultPresion['p_estado']; ?>.</p>
+                  <p class="card-text">Alerta: <?php echo $resultPresion['p_advertencia']; ?>!. <?php echo $resultPresion['p_nota']; ?></p>
                   
                 </div>
               </div>

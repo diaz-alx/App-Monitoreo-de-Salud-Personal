@@ -1,32 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="css/login.css">
-	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" type='text/css' href="css/fontawesome/all.js">
+	<link rel="stylesheet" type='text/css' href="css/bootstrap.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Raleway:400,300' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type='text/css' href="css/estilos.css">
 	
-    <title>Clínica ABC</title>
+	<title>Iniciar Sesión</title>
 </head>
 <body>
-<div class="wrapper">
-	<h2 class="text-center">Bienvenido a nuestra Web</h2> 
-    <form class="form-signin" action="" method="POST">       
-      <h2 class="form-signin-heading text-center">CLINICA ABC</h2>
-      <input type="text" class="form-control" name="Username" placeholder="Nombre de usuario" required="" autofocus="" />
-      <input type="password" class="form-control" name="Password" placeholder="Contraseña" required=""/>
-	  <?php if(isset($msg)){?>
-		<?php echo $msg;?>
-		<?php } ?>      
-      
-      <input class="btn btn-lg btn-primary btn-block" type="submit" value="Iniciar Sesión" name="Submit">
-    </form>
-</div>
+	<div class="contenedor">
+	<h1 class="titulo">ClINICA ABC</h1>
+		<h1 class="titulo">Iniciar Sesión</h1>
+		
+		<hr class="border">
 
+		<form class="formulario" name="login" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+			<div class="form-group">
+				<i class="icono izquierda fa fa-user"></i><input class="usuario" type="text" name="usuario" placeholder="Usuario">
+			</div>
+
+			<div class="form-group">
+				<i class="icono izquierda fa fa-lock"></i><input class="password_btn" type="password" name="password" placeholder="Password">
+				<i class="submit-btn fa fa-arrow-right" onclick="login.submit()"></i>
+			</div>
+
+			<!-- Comprobamos si la variable errores esta seteada, si es asi mostramos los errores -->
+			<?php if(!empty($msg)): ?>
+				
+						<?php echo $msg; ?>
+					
+			<?php endif; ?>
+		</form>
+
+		<p class="texto-registrate">
+			¿ Aun no tienes cuenta ?
+			<a href="registrate.php">Regístrate</a>
+		</p>
+
+	</div>
 </body>
 <footer>
 <p class="text-center">Universidad Tecnológica de Panamá &reg;</p>
-<p class="text-center">Por: Gabriel Díaz & Gerardo Valderrama</p>
+<p class="text-center">Por: Gabriel Díaz</p>
 </footer>
 </html>

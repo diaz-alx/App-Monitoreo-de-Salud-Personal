@@ -21,14 +21,15 @@
             <div class="card-body">
                 <h2 class="card-tittle" ><b>Historial de: </b><b style="color:red;"> <?php echo ucwords($_SESSION['UserValues']['nombre']); ?></b></h2>
                 <p>Peso: <?php echo $_SESSION['UserValues']['peso']; ?> Kg</p>
-                <p>Altura: <?php echo $_SESSION['UserValues']['altula']; ?> mts</p>
-                <p>Tu lectura anterior: <?php //echo $_SESSION['UserValues']['imc']['valor']; ?></p>
-                <p>Tu estado de IMC es: <?php //echo $_SESSION['UserValues']['imc']['estado']; ?></p>
+                <p>Altura: <?php echo $_SESSION['UserValues']['altura']; ?> mts</p>
+                <p>Tu lectura anterior: <?php echo $_SESSION['resultado']['i_lec1']; ?></p>
+                <p>Tu estado de IMC es: <?php echo $_SESSION['resultado']['i_estado']; ?></p>
+                <p><?php echo $_SESSION['resultado']['i_advertencia']; ?></p>
             </div>
           </div>
           <div class="col-md-6">
             <h2 class="card-tittle text-center" ><b>Estado</b></h2>
-            <img src="<?php //echo $_SESSION['UserValues']['imc']['img']; ?>" alt="" class="card-img-top">
+            <img src="<?php echo $_SESSION['resultado']['i_img_estado']; ?>" alt="" class="card-img-top">
           </div>
         </div>
       </div>
@@ -78,13 +79,13 @@
                   <h5 class="card-title"><b>Resultados de tu IMC</b></h5>
                   <p class="card-text">Ingresaste un Peso de: <input type="number" name="peso" value="<?php echo $tmpPeso; ?>" readonly> Kg</p> 
                   <p class="card-text">Ingresaste una Altura de: <input type="number" name="altura" value="<?php echo $tmpAltura; ?>" readonly> mts</p> 
-                  <p>Tu IMC es de: <input type="number" name="resultado" step="0.01" value="<?php echo $resultImc['imc_valor']; ?>" readonly> </p> 
-                  <p class="card-text">Nota: <?php echo $resultImc['nota']; ?></p>
+                  <p>Tu IMC es de: <input type="number" name="resultado" step="0.01" value="<?php echo $resultImc['i_lec1']; ?>" readonly> </p> 
+                  <p class="card-text">Nota: <?php echo $resultImc['i_nota']; ?></p>
                   
                 </div>
               </div>
               <div class="col-md-6">
-                <img  class="card-img-right" style="width:400px;" src="<?php echo $resultImc['img_estado']; ?>" alt="">
+                <img  class="card-img-right" style="width:400px;" src="<?php echo $resultImc['i_img_estado']; ?>" alt="">
               </div>
             </div>
           </div>

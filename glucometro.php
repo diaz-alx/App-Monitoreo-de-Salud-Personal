@@ -5,7 +5,8 @@ if(!isset($_SESSION['UserValues'])){
     header("location:login.php");
     exit;
 }
-require 'class/Pacientes.class.php';
+require 'config/database.php';
+require 'class/Pacientes.php';
 
 $id = $_SESSION['UserValues']['id_user'];
 if (!isset($_POST['calcular_glucosa']) && !isset($_POST['submit']) && !isset($_REQUEST['actualizar_glucosa'])){
@@ -26,7 +27,7 @@ if(isset($_POST['calcular_glucosa'])){
     
         $tmpGlucosa = $tmpUser->CalcularGlucosa($tmpLectura, $tmpPeriodo, FALSE);
         $resultGlucosa = $tmpGlucosa;
-        $_SESSION['TmpValGlucosa'] = $resultGlucosa;
+        $_SESSION['TmpGlucosa'] = $resultGlucosa;
     }
 }
 
@@ -41,8 +42,15 @@ if(isset($_POST['submit'])){
     $setUserGlucosa = new Pacientes();
     
     $setGlucosa = $setUserGlucosa->GuardarGlucosa(
-        $tmpLectura,
-        $tmpPeriodo, TRUE);
+        //colocar prefijo
+        $_SESSION['resultado']['g_tipo'] = $_SESSION['TmpGlucosa']['g_tipo'], 
+        $_SESSION['resultado']['g_lec1'] = $_SESSION['TmpGlucosa']['g_lec1'], 
+        $_SESSION['resultado']['g_estado'] = $_SESSION['TmpGlucosa']['g_estado'],
+        $_SESSION['resultado']['g_nivel'] = $_SESSION['TmpGlucosa']['g_nivel'],
+        $_SESSION['resultado']['g_nota'] = $_SESSION['TmpGlucosa']['g_nota'],
+        $_SESSION['resultado']['g_advertencia'] = $_SESSION['TmpGlucosa']['g_advertencia'],
+        $id
+       );
    
     }
 }

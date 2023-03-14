@@ -27,9 +27,8 @@ if(isset($_POST['calcular_imc'])){
         $tmpUser = new Pacientes();
         $tmpImc = $tmpUser->CalcularImc($tmpPeso, $tmpAltura, FALSE);
         $resultImc = $tmpImc;
-        $_SESSION['TmpImcResult'] = $tmpImc;
-
-        echo $_SESSION['TmpImcResult']['imc_valor'];
+        $_SESSION['tmpimc'] = $tmpImc;
+        print_r($tmpImc);
     }
 }
 
@@ -43,13 +42,17 @@ if(isset($_POST['submit'])){
     } else {
     
     $setUserImc = new Pacientes();
+    
     $setUserImc->GuardarImc(
-        $_SESSION['TmpImcResult']['imc_valor'],
-        $_SESSION['TmpImcResult']['estado'], 
-        $_SESSION['TmpImcResult']['img_estado'],
-        $_SESSION['TmpImcResult']['nota'],
-        $_SESSION['TmpImcResult']['advertencia'],
-        $id);
+        //colocar el prejifo
+        $_SESSION['resultado']['i_lec1'] = $_SESSION['tmpimc']['i_lec1'], 
+        $_SESSION['resultado']['i_estado'] = $_SESSION['tmpimc']['i_estado'], 
+        $_SESSION['resultado']['i_img_estado'] = $_SESSION['tmpimc']['i_img_estado'],
+        $_SESSION['resultado']['i_nota'] = $_SESSION['tmpimc']['i_nota'],
+        $_SESSION['resultado']['i_advertencia'] = $_SESSION['tmpimc']['i_advertencia'],
+        $id,
+        $_SESSION['UserValues']['peso'] = $tmpPeso 
+    );
 
     }
 }

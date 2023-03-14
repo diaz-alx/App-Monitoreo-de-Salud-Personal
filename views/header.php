@@ -55,13 +55,17 @@
               </li>
 
               <li>
+                <a href="reportes.php"><i class="fas fa-heartbeat fa-2x"></i>Mis Reportes</a>
+              </li>
+
+              <li>
                 <a href="logout.php"><i class="fas fa-sign-out-alt fa-2x"></i> Cerrar Sesión</a>
               </li>
             </ul>
 
             <div class="footer">
                   <p>Universidad Tecnológica de Panamá&reg;</p><br>
-                  <p>Por: Gabriel Díaz & Gerardo Valderrama</p>
+                  <p>Por: Gabriel Díaz</p>
                   <i class="fab fa-github"></i>
             </div>
     </div>

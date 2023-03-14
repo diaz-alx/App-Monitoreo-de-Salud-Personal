@@ -7,7 +7,7 @@ Usuario de prueba 1:
 
 Usuario de prueba 2:
     Nombre: admin
-    Contrasña: 123
+    Contrasña: 
 
 
 Funcionalidades de la aplicación:
